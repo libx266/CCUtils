@@ -1,6 +1,6 @@
 require "/RabbitCrypt"
-print("inject encryption")
-PASSWORD = 176.384711
+print("inject encryption, set password:")
+PASSWORD = tonumber(io.read())
 print("change PASSWORD to non-testing usage")
 
 local mkdir = function (name) 
