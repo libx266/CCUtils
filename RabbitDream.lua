@@ -25,8 +25,10 @@ local stringbuilder = function(list, sep)
     
 end
 
-local split = function(inputstr, sep)
-    inputstr = Decode(inputstr, PASSWORD)
+local split = function(inputstr, sep, notEncrypt)
+    if notEncrypt ~= true then
+        inputstr = Decode(inputstr, PASSWORD)
+    end
     if sep == nil then sep = "%s" end
     local t={}
     for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
