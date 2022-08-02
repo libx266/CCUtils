@@ -25,16 +25,17 @@ local stringbuilder = function(list, sep)
     
 end
 
-local split = function(inputstr, sep, notEncrypt)
-    if notEncrypt ~= true then
-        inputstr = Decode(inputstr, PASSWORD)
-    end
+local splitBase = function(inputstr, sep)
     if sep == nil then sep = "%s" end
     local t={}
     for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
         table.insert(t, str)
     end
     return 
+end
+
+local split = function(inputstr, sep)
+    return splitBase(Decode(inputstr, PASSWORD), sep)
 end
 
 local select = function(list, action)
@@ -84,7 +85,7 @@ function InitTable(name)
 
     local Predicate = function(action, predicate)
         local lastID = tonumber(open(name, "lastid", "r"):read())
-        local exclude = select(split(open(name, "excludeid", "r"):read(), ";"), tonumber)
+        local exclude = select(splitBase(open(name, "excludeid", "r"):read(), ";"), tonumber)
         local result = {}
         for id = 1, lastID - 1 do
             local check = true
