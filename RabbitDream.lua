@@ -1,3 +1,8 @@
+require "/RabbitCrypt"
+print("inject encryption")
+PASSWORD = 176.384711
+print("change PASSWORD to non-testing usage")
+
 local mkdir = function (name) 
     fs.makeDir(name)
 end
@@ -17,17 +22,18 @@ local stringbuilder = function(list, sep)
             t[#t+1] = tostring(v)
         end
     end
-    return table.concat(t,sep)
+    return Encode(table.concat(t,sep), PASSWORD)
     
 end
 
 local split = function(inputstr, sep)
+    inputstr = Decode(inputstr, PASSWORD)
     if sep == nil then sep = "%s" end
     local t={}
     for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
         table.insert(t, str)
     end
-    return t
+    return 
 end
 
 local select = function(list, action)
