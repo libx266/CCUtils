@@ -31,7 +31,7 @@ local splitBase = function(inputstr, sep)
     for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
         table.insert(t, str)
     end
-    return 
+    return t
 end
 
 local split = function(inputstr, sep)
