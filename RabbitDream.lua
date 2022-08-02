@@ -14,15 +14,19 @@ local remove = function(folder, name)
     fs.delete("./"..folder.."/"..tostring(name)..".txt")
 end
 
-local stringbuilder = function(list, sep)
+local stringbuilderBase = function(list, sep)
     local t = { }
     for k,v in ipairs(list) do
         if v ~= nil then
             t[#t+1] = tostring(v)
         end
     end
-    return Encode(table.concat(t,sep), PASSWORD)
+    return table.concat(t,sep)
     
+end
+
+local stringbuilder = function(list, sep) 
+    return Encode(stringbuilderBase(list, sep), PASSWORD)
 end
 
 local splitBase = function(inputstr, sep)
@@ -212,8 +216,8 @@ function InitTable(name)
 
         ExportCSV = function(fileName)
             local lastID = tonumber(open(name, "lastid", "r"):read())
-            local exclude = select(split(open(name, "excludeid", "r"):read(), ";"), tonumber)
-            local result = {open(name, "head", "r"):read()}
+            local exclude = select(splitBase(open(name, "excludeid", "r"):read(), ";"), tonumber)
+            local result = {Decode(open(name, "head", "r"):read(), PASSWORD)}
             for id = 1, lastID - 1 do
                 local check = true
                 for k, e in pairs(exclude) do
@@ -223,12 +227,12 @@ function InitTable(name)
                     end
                 end
                 if check then
-                    local row = open(name, tostring(id)):read()
+                    local row = Decode(open(name, tostring(id)):read(), PASSWORD)
                     table.insert(result, id + 1, row)
                 end
             end
             local file = io.open(fileName..".csv", "w")
-            file:write(stringbuilder(result, "\n"))
+            file:write(stringbuilderBase(result, "\n"))
             file:close()
             return true
         end
